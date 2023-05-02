@@ -22,9 +22,30 @@ class UsersController extends Controller
     {
         if(Auth::attempt($request->only(['email', 'password']))) {
             $user = Auth::user();
+            $user->tokens()->delete();
             return response()->json([
-                'token' => $user->createToken('api')->plainTextToken
+                'data' => [
+                    'token' => $user->createToken('api')->plainTextToken
+                ]
+            ]);
+        } else {
+            return response()->json([
+                'error' => [
+                    'code' => '403',
+                    'message' => 'Login failed'
+                ]
             ]);
         }
+    }
+
+    public function logout()
+    {
+        $user = Auth::user();
+        $user->tokens()->delete();
+        return response()->json([
+            'data' => [
+                'message' => 'Logout'
+            ]
+        ]);
     }
 }

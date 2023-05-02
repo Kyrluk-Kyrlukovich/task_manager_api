@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User_Channel extends Model
+class UserChannel extends Model
 {
     use HasFactory;
 
@@ -21,4 +21,8 @@ class User_Channel extends Model
         'id_user_function'
     ];
 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'id_user_channel', 'id_user_channel');
+    }
 }

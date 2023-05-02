@@ -11,6 +11,10 @@ class Task extends Model
 
     public $timestamps = false;
 
+    protected $table = 'tasks';
+
+    protected $primaryKey = 'id_task'; 
+
     protected $fillable = [
         'id_task',
         'text_task',
@@ -22,4 +26,9 @@ class Task extends Model
         'id_task_color',
         'id_user_channel',
     ];
+
+    public function userChannel()
+    {
+        return $this->belongsTo(UserChannel::class, 'id_user_channel', 'id_task');
+    }
 }

@@ -6,7 +6,7 @@ use App\Http\Requests\StoreChannelRequest;
 use App\Http\Resources\IndexTasksResource;
 use App\Models\Channel;
 use App\Models\Task;
-use App\Models\User_Channel;
+use App\Models\UserChannel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,10 +15,12 @@ class ChannelsController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $check = User_Channel::where('id_user', $user->id_user)->exists();
+        $check = UserChannel::where('id_user', $user->id_user)->exists();
         if ($check) {
             $channels = $user->channels;
-            return $channels;
+            return response()->json([
+                'data' => $channels
+            ]);
         } else {
             return response()->json([
                 'error' => [
@@ -39,5 +41,25 @@ class ChannelsController extends Controller
                 'message' => 'Канал создан'
             ]
         ], 200);
+    }
+
+    public function show(string $id)
+    {
+        $user = Auth::user();
+        $userChannel = UserChannel::where([['id_user', $user->id_user], ['id_channel', (int)$id]])->first();
+        //dd($userChannel);
+        if ($userChannel) {
+            //dd($userChannel->id_user_channel);
+           // dd(Task::where('id_user_channel', $userChannel->id_user_channel)->get());
+           $tasks = $userChannel->tasks()->get();
+            return IndexTasksResource::collection($tasks);
+        } else {
+            return response()->json([
+                'error' => [
+                    'code' => 403,
+                    'message' => 'Channel not found'
+                ]
+            ], 403);
+        }
     }
 }
