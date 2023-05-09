@@ -31,4 +31,14 @@ class Task extends Model
     {
         return $this->belongsTo(UserChannel::class, 'id_user_channel', 'id_task');
     }
+
+    public function color()
+    {
+        return $this->belongsTo(TaskColor::class, 'id_task_color');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'id_status');
+    }
 }

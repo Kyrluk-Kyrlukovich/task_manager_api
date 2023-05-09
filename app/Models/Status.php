@@ -15,4 +15,9 @@ class Status extends Model
         'id_status',
         'name_status'
     ];
+
+    public function tasks()
+    {
+        return $this->belongsTo(Task::class, 'id_task');
+    }
 }

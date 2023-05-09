@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
   Route::post('channels/{id}/create-task', [TaskController::class, 'store']);
   Route::get('channels/{id}/tasks', [TaskController::class, 'index']);
+  Route::post('channel/{id}', [TaskController::class, 'updateTask']);
 
 
 });

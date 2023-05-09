@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\IndexTasksResource;
 use App\Models\Channel;
 use App\Models\Task;
@@ -57,6 +58,34 @@ class TaskController extends Controller
             return response()->json([
                 'error' => [
                     'message' => 'Канал не найден'
+                ]
+            ], 403);
+        }
+    }
+
+    public function updateTask(string $id, UpdateTaskRequest $request)
+    {
+        $user = Auth::user();
+        $userChannelCheck = UserChannel::where([['id_channel', $id], ['id_user', $user->id_user]])->first();
+        if($userChannelCheck) {
+            $userTaskCheck = Task::where([['id_task', $request->id_task], ['id_user_channel', $userChannelCheck->id_user_channel]])->first();
+            if($userTaskCheck) {
+
+                $userTaskCheck->update(['date_start' => date("Y-m-d H:i",strtotime($request->date_start))] + $request->validated());
+                return response()->json([
+                    'data' => new IndexTasksResource($userTaskCheck) 
+                ], 200);
+            } else {
+                return response()->json([
+                    'error' => [
+                        'message' => 'Это не ваша задача'
+                    ]
+                ], 403);
+            }
+        } else {
+            return response()->json([
+                'error' => [
+                    'message' => 'Вы не состоите в этом канале'
                 ]
             ], 403);
         }

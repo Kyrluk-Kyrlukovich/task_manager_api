@@ -39,8 +39,8 @@ class IndexTasksResource extends JsonResource
                 'hour' => date('H', strtotime($this->date_end)),
                 'minutes' => date('i', strtotime($this->date_end)),
             ],
-            'id_status' => $this->id_status,
-            'id_task_color' => $this->id_task_color,
+            'status' => $this->status,
+            'color' => $this->color,
             'id_user_channel' => $this->id_user_channel,
         ];
     }

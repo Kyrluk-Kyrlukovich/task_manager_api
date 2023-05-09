@@ -15,9 +15,9 @@ class IndexColorTasksResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id_color,
-            'color' => $this->name_color,
-            'tag' => $this->tag_color
+            'id_color' => $this->id_color,
+            'name_color' => $this->name_color,
+            'name_tag' => $this->tag_color
         ];
     }
 }

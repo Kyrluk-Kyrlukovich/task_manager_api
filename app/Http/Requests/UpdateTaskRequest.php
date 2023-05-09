@@ -6,18 +6,17 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-
-class StoreTaskRequest extends FormRequest
+class UpdateTaskRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
+            'id_task'=> ['required', 'exists:tasks,id_task'],
+            'head_task' => ['nullable', 'string'],
             'text_task' => ['nullable', 'string'],
-            'head_task' => ['required', 'string'],
-            'date_start' => ['required', 'date_format:d.m.Y H:i', 'unique:tasks,date_start'],
-            'date_end' => ['nullable', 'date_format:d.m.Y H:i'],
-            'id_status' =>['required', 'exists:statuses,id_status'],
-            'id_task_color'=>['required', 'exists:task_colors,id_color'],
+            'date_start' => ['nullable', 'date_format:d.m.Y H:i', 'unique:tasks,date_start'],
+            'id_status' =>['nullable', 'exists:statuses,id_status'],
+            'id_task_color'=>['nullable', 'exists:task_colors,id_color'],
         ];
     }
 
