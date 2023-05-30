@@ -18,8 +18,12 @@ class UserChannel extends Model
         'name_role',
         'id_user',
         'id_channel',
-        'id_user_function'
     ];
+
+    public function userFunctions()
+    {
+        return $this->belongsToMany(UserFunctions::class, 'user_channel_functions', 'id_user_channel', 'id_user_function');
+    }
 
     public function tasks()
     {

@@ -6,25 +6,26 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class LoginRequest extends FormRequest
+class UserFunctionRequest extends FormRequest
 {
+
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string'],
-            'password' => ['required', 'string']
+            'id_user' => ['required', 'exists:users,id_user']
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response()->json([
+        throw new HttpResponseException(
+            response()->json([
                 'error' => [
                     'code' => 422,
-                    'message'=> 'Validation failed',
+                    'message' => 'Validation failed',
                     'errors' => $validator->errors()
                 ]
-                ], 422)   
+            ], 422)
         );
     }
 }

@@ -28,7 +28,7 @@ class UpdateTaskRequest extends FormRequest
                     'message'=> 'Validation failed',
                     'errors' => $validator->errors()
                 ]
-            ])   
+                ], 422)   
         );
     }
 }

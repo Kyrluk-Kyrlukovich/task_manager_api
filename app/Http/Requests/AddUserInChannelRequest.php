@@ -2,20 +2,16 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class SignupRequest extends FormRequest
+class AddUserInChannelRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
-            'first_name' => ['required','string', 'max:20'],
-            'last_name' => ['required','string', 'max:20'],
-            'email' => ['required','string', 'max:30', 'email:rfc,dns', 'unique:users,email'],
-            'password' => ['required','string'],
-            'phone_user' => ['required','string', 'max:20']
+            'id_user' => ['required', 'exists:users,id_user'],
         ];
     }
 
