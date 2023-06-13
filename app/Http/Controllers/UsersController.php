@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddUserOnChannelRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\ShowUserRequest;
 use App\Http\Requests\SignupRequest;
 use App\Http\Resources\IndexUsersChannel;
 use App\Http\Resources\IndexUsersResource;
@@ -58,7 +59,38 @@ class UsersController extends Controller
             'data' => [
                 'message' => 'Logout'
             ]
-        ]);
+        ], 200);
+    }
+
+    public function showUser(string $id)
+    {
+        $user = Auth::user();
+        $userChannel = UserChannel::where([['id_user', $user->id_user], ['id_channel', $id]])->first();
+        if($userChannel) {
+            return response()->json([
+                'data' => $userChannel->userFunctions
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => [
+                    'code' => '403',
+                    'message' => 'Вы не состоите в этом канале'
+                ]
+            ]);
+        }
+    }
+
+    public function authUser() {
+        $user = Auth::user();
+        return response()->json([
+            'data' => [
+                'first_name'=> $user->first_name,
+                'last_name'=> $user->last_name,
+                'patronomic'=> $user->patronomic,
+                'phone_user'=> $user->phone_user,
+                'email'=> $user->email,
+            ]
+        ],200);
     }
 
     public function usersChannel(string $id)

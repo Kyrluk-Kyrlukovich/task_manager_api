@@ -6,12 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AddUserInChannelRequest extends FormRequest
+class addFunctionsRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'id_user' => ['required', 'exists:users,id_user'],
+            'functions' => ['required', 'array', 'exists:user_functions,id_user_functions']
         ];
     }
 
