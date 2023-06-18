@@ -35,8 +35,9 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('logout', [UsersController::class, 'logout']);
   Route::get('users', [UsersController::class, 'index']);
   Route::get('channel/{id}/settings', [UsersController::class, 'usersChannel']);
-  Route::get('user/{id}', [UsersController::class, 'showUser']);
+  Route::get('user/{id}', [UsersController::class, 'showUserFunction']);
   Route::get('profile', [UsersController::class, 'authUser']);
+  Route::post('profile/update-user', [UsersController::class, 'updateUser']);
 
   Route::get('channels', [ChannelsController::class, 'index']);
   Route::get('channel/{id}', [ChannelsController::class, 'show']);

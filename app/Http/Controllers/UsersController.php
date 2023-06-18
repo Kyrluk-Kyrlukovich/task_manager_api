@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AddUserOnChannelRequest;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\ShowUserRequest;
 use App\Http\Requests\SignupRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\IndexUsersChannel;
-use App\Http\Resources\IndexUsersResource;
 use App\Http\Resources\SignupResource;
 use App\Models\Channel;
 use App\Models\User;
 use App\Models\UserChannel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -33,14 +32,15 @@ class UsersController extends Controller
 
     public function login(LoginRequest $request)
     {
-        if(Auth::attempt($request->only(['email', 'password']))) {
+        if (Auth::attempt($request->only(['email', 'password']))) {
             $user = Auth::user();
             $user->tokens()->delete();
+            $token = $user->createToken('api');
             return response()->json([
                 'data' => [
-                    'token' => $user->createToken('api')->plainTextToken
+                    'token' => $token->plainTextToken
                 ]
-            ]);
+            ])->withCookie('Bearer Token', $token->plainTextToken, 10);
         } else {
             return response()->json([
                 'error' => [
@@ -62,11 +62,11 @@ class UsersController extends Controller
         ], 200);
     }
 
-    public function showUser(string $id)
+    public function showUserFunction(string $id)
     {
         $user = Auth::user();
         $userChannel = UserChannel::where([['id_user', $user->id_user], ['id_channel', $id]])->first();
-        if($userChannel) {
+        if ($userChannel) {
             return response()->json([
                 'data' => $userChannel->userFunctions
             ], 200);
@@ -80,27 +80,48 @@ class UsersController extends Controller
         }
     }
 
-    public function authUser() {
+    public function authUser()
+    {
         $user = Auth::user();
         return response()->json([
             'data' => [
-                'first_name'=> $user->first_name,
-                'last_name'=> $user->last_name,
-                'patronomic'=> $user->patronomic,
-                'phone_user'=> $user->phone_user,
-                'email'=> $user->email,
+                'firstName' => $user->first_name,
+                'lastName' => $user->last_name,
+                'patronymic' => $user->patronomic,
+                'phoneUser' => $user->phone_user,
+                'email' => $user->email,
             ]
-        ],200);
+        ], 200);
+    }
+
+    public function updateUser(UpdateUserRequest $request)
+    {
+        $user = Auth::user();
+        $emailCheck = User::where([['email', $request->email], ['id_user', '!=', $user->id_user]])->first();
+        if (!$emailCheck) {
+            $user->update($request->validated());
+            return response()->json([
+                'data' => [
+                    'message' => 'Данные изменены',
+                ]
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => [
+                    'code' => '403',
+                    'message' => 'Этот email уже используется'
+                ]
+            ]);
+        }
     }
 
     public function usersChannel(string $id)
     {
         $user = Auth::user();
         $checkUserChannel = UserChannel::where([['id_user', $user->id_user], ['id_channel', $id]])->first();
-        if($checkUserChannel) {
+        if ($checkUserChannel) {
             $channel = Channel::find((int) $id);
             return new IndexUsersChannel($channel);
-
         } else {
             return response()->json([
                 'error' => [
