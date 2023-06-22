@@ -141,6 +141,43 @@ class ChannelsController extends Controller
         }
     }
 
+    public function deleteChannel(string $id) {
+        $user = Auth::user();
+        $checkUserChannel = UserChannel::where([['id_user', $user->id_user], ['id_channel', $id]])->first();
+        if($checkUserChannel) {
+            $functions = $checkUserChannel->userFunctions;
+            $root = false;
+            foreach ($functions as $key => $value) {
+                if ($value->function == 'all_functions') {
+                    $root = true;
+                }
+            }
+            if ($root) {
+                $channel = Channel::find((int) $id);
+                $channel->delete();
+                return response()->json([
+                    'data' => [
+                        'message' => 'Канал успешно удален'
+                    ]
+                ], 200);
+            } else {
+                return response()->json([
+                    'error' => [
+                        'code' => 403,
+                        'message' => 'У вас не достаточно прав для удаления пользователя в этом канале'
+                    ]
+                ], 403);
+            }
+        } else {
+            return response()->json([
+                'error' => [
+                    'code' => 403,
+                    'message' => 'Вы не состоите в этом канале'
+                ]
+            ], 403);
+        }
+    }
+
     public function deleteUserFromChannel(string $id, DeleteUserFromChannelRequest $request)
     {
         $user = Auth::user();
@@ -230,7 +267,7 @@ class ChannelsController extends Controller
         $userChannel = UserChannel::where([['id_channel', $id], ['id_user', $user->id_user], ['creator', 1]])->first();
         if($userChannel) {
             $creator = true;
-        } 
+        }
         return response()->json([
             'data' => [
                 'creator' => $creator

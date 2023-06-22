@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::post('channels/create-channel', [ChannelsController::class, 'store']);
   Route::post('channel/{id}/settings/adduser', [ChannelsController::class, 'addUserInChannel']);
   Route::post('channel/{id}/settings/deleteuser', [ChannelsController::class, 'deleteUserFromChannel']);
+  Route::get('channel/{id}/settings/deletechannel', [ChannelsController::class, 'deleteChannel']);
   Route::post('channel/{id}/settings', [ChannelsController::class, 'updateChannel']);
 
   Route::post('channels/{id}/create-task', [TaskController::class, 'store']);
