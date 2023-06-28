@@ -45,9 +45,9 @@ class UsersController extends Controller
             return response()->json([
                 'error' => [
                     'code' => '403',
-                    'message' => 'Login failed'
+                    'message' => 'Неверный логин или пароль'
                 ]
-            ]);
+            ], 403);
         }
     }
 

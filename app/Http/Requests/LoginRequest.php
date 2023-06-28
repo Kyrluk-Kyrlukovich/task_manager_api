@@ -24,7 +24,7 @@ class LoginRequest extends FormRequest
                     'message'=> 'Validation failed',
                     'errors' => $validator->errors()
                 ]
-                ], 422)   
+            ], 422)
         );
     }
 }

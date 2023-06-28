@@ -14,8 +14,8 @@ class UpdateUserRequest extends FormRequest
             'first_name' => ['string', 'max:20'],
             'last_name' => ['string', 'max:20'],
             'email' => ['string', 'max:30', 'email:rfc,dns'],
+            'patronomic' => ['string', 'max:20', 'nullable'],
             'phone_user' => ['string', 'max:20'],
-            'patronymic' => ['string', 'max:20']
         ];
     }
 

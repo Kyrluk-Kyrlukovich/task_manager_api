@@ -12,8 +12,8 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'text_task' => ['nullable', 'string'],
-            'head_task' => ['required', 'string'],
+            'text_task' => ['nullable', 'string', 'max:255'],
+            'head_task' => ['required', 'string', 'max:255'],
             'date_start' => ['required', 'date_format:d.m.Y H:i', 'unique:tasks,date_start'],
             'date_end' => ['nullable', 'date_format:d.m.Y H:i'],
             'id_status' =>['required', 'exists:statuses,id_status'],
@@ -29,7 +29,7 @@ class StoreTaskRequest extends FormRequest
                     'message'=> 'Validation failed',
                     'errors' => $validator->errors()
                 ]
-                ], 422)   
+            ], 422)
         );
     }
 }

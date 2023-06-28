@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class indexTaskRequest extends FormRequest
 {
@@ -19,5 +21,17 @@ class indexTaskRequest extends FormRequest
             'id_task_color' => ['required'],
             'id_user_channel' => ['required'],
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+                'error' => [
+                    'code' => 422,
+                    'message'=> 'Validation failed',
+                    'errors' => $validator->errors()
+                ]
+            ], 422)
+        );
     }
 }
