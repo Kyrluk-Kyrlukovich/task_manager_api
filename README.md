@@ -15,6 +15,11 @@ name file: task_manager.sql
 ```
 composer i
 ```
+## Users in DATABASE
+
+```
+All users have password: 12345
+```
 
 
 
