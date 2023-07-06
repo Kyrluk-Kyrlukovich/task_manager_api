@@ -42,15 +42,15 @@ class UserFunctionsController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'data' => [
+                    'error' => [
                         'code' => '403',
-                        'message' => 'У вас недостаточно прав для этого действия'
+                        'message' => 'Вы не можете редактировать самого себяgi'
                     ]
                 ], 403);
             }
         } else {
             return response()->json([
-                'data' => [
+                'error' => [
                     'code' => '403',
                     'message' => 'Channel not found'
                 ]
