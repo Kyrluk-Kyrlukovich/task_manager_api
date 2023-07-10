@@ -12,7 +12,7 @@ class UpdateTaskRequest extends FormRequest
     {
         return [
             'id_task'=> ['required', 'exists:tasks,id_task'],
-            'head_task' => ['nullable', 'string'],
+            'head_task' => ['nullable', 'string', 'max:40'],
             'text_task' => ['nullable', 'string'],
             'date_start' => ['nullable', 'date_format:d.m.Y H:i', 'unique:tasks,date_start'],
             'id_status' =>['nullable', 'exists:statuses,id_status'],
@@ -28,7 +28,7 @@ class UpdateTaskRequest extends FormRequest
                     'message'=> 'Validation failed',
                     'errors' => $validator->errors()
                 ]
-                ], 422)   
+                ], 422)
         );
     }
 }
