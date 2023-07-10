@@ -18,6 +18,9 @@ composer i
 ## Users in DATABASE
 
 ```
+Александр Васильев: main@yand.com
+Алексей Васильев: 12345678w@yand.com
+Alexex Vasilev: 123w@yand.com
 All users have password: 12345
 ```
 
